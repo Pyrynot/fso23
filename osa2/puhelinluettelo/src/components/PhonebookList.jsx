@@ -1,7 +1,7 @@
 import PhonebookEntry from './PhonebookEntry'
 
 
-const PhonebookList = ({ persons, newSearch }) => {
+const PhonebookList = ({ persons, newSearch, handleDelete }) => {
     const filteredPersons = persons.filter((person) =>
       person.name.toLowerCase().includes(newSearch.toLowerCase())
     )
@@ -13,6 +13,8 @@ const PhonebookList = ({ persons, newSearch }) => {
             key={person.id}
             name={person.name}
             number={person.number}
+            id={person.id}
+            handleDelete={handleDelete}
           />
         ))}
       </ul>
