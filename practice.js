@@ -9,4 +9,5 @@ console.log(t.length) // tulostuu 4
 
 t.forEach(value => {
   console.log(value)  // tulostuu 1, -1, 3, 5 omille riveilleen
-}) 
+})
+
