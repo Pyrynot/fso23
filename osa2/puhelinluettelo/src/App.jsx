@@ -3,6 +3,7 @@ import PhonebookList from './components/PhonebookList'
 import PhonebookForm from './components/PhonebookForm'
 import SearchInput from './components/SearchInput'
 import peopleService from './services/people'
+import Notification from './components/Notification'
 
 
 const App = () => {
@@ -10,6 +11,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newSearch, setNewSearch] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
 
   useEffect(() => {
     console.log('effect')
@@ -28,7 +30,7 @@ const App = () => {
   }
 
 
-
+//tässä on kyllä cursed komponentti huhhuh
   const addName = (event) => {
     event.preventDefault()
   
@@ -48,13 +50,30 @@ const App = () => {
             setPersons((prevPersons) =>
               prevPersons.map((person) =>
                 person.id === updatedData.id ? updatedData : person
+                
               )
             )
-  
+            
+            setSuccessMessage(
+              `updated '${newName}'`)
+            setTimeout(() => {
+              setSuccessMessage(null)
+              }, 5000)
+            
             setNewName('')
             setNewNumber('')
           })
-          
+          .catch((error) => {
+            setSuccessMessage(
+              `'${newName}' already deleted`)
+            setTimeout(() => {
+            setSuccessMessage(null)
+                }, 5000)
+              
+            setNewName('')
+            setNewNumber('')
+            
+          });
       } 
       
       else {
@@ -76,6 +95,15 @@ const App = () => {
           setNewName('')
           setNewNumber('')
         })
+
+        setSuccessMessage(
+          `added '${newName}'`)
+        setTimeout(() => {
+          setSuccessMessage(null)
+          }, 5000)
+        
+        setNewName('')
+        setNewNumber('')
     }
   }
 
@@ -109,6 +137,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={successMessage} />
       <SearchInput newSearch={newSearch} handleSearchChange={handleSearchChange} />
       <h2>add a new</h2>
       <PhonebookForm
