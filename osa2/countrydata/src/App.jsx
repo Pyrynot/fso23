@@ -8,6 +8,7 @@ const App = () => {
   const [countries, setCountries] = useState([])
   const [allCountries, setAllCountries] = useState([])
   const [newSearch, setNewSearch] = useState('')
+  const [selectedCountry, setSelectedCountry] = useState(null)
 
   useEffect(() => {
     console.log('effect');
@@ -17,6 +18,7 @@ const App = () => {
     })
   }, [])
 
+  
 
   const handleSearchChange = (event) => {
     setNewSearch(event.target.value);
@@ -26,27 +28,39 @@ const App = () => {
         typeof country.name.common === 'string' &&
         country.name.common.toLowerCase().includes(event.target.value.toLowerCase())
       )
-      setCountries(filteredCountries);
+      setCountries(filteredCountries)
+      if (filteredCountries.length === 1) {
+        setSelectedCountry(filteredCountries[0])
+      } else {
+        setSelectedCountry(null) // tyhjäksi jos monta maata
+      }
     } else {
       setCountries([])
+      setSelectedCountry(null) // tyhjäksi jos haku tyhjä
     }
   }
+
+    
+
+  
 
 
   return (
     <div>
       <Filter newSearch={newSearch} handleSearchChange={handleSearchChange} />
-      {countries.length > 10 ? (
-        <p>Too many matches, please make your query more specific.</p>
-      ) : countries.length === 1 ? (
-        <div>
-          <CountryDetails country={countries[0]} />
-        </div>
+      {selectedCountry ? (
+        <CountryDetails country={selectedCountry} />
+      ) : countries.length > 10 ? (
+        <p>Too many matches</p>
       ) : (
-        
         <ul>
           {countries.map((country) => (
-            <li key={country.cca3}>{country.name.common}</li>
+            <li key={country.cca3}>
+              {country.name.common}
+              <button onClick={() => setSelectedCountry(country)}>
+                show
+              </button>
+            </li>
           ))}
         </ul>
       )}
