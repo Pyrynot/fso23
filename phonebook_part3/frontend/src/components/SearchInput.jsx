@@ -1,4 +1,7 @@
-const SearchInput = ({ newSearch, handleSearchChange }) => (
+import PropTypes from 'prop-types';
+
+function SearchInput({ newSearch, handleSearchChange }) {
+  return (
     <p>
       filter shown with
       <input
@@ -6,6 +9,12 @@ const SearchInput = ({ newSearch, handleSearchChange }) => (
         onChange={handleSearchChange}
       />
     </p>
-  )
+  );
+}
 
-export default SearchInput
+SearchInput.propTypes = {
+  newSearch: PropTypes.string.isRequired,
+  handleSearchChange: PropTypes.func.isRequired,
+};
+
+export default SearchInput;

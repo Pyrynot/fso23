@@ -1,4 +1,9 @@
-const PhonebookForm = ({ addName, newName, handleNameChange, newNumber, handleNumberChange }) => (
+import PropTypes from 'prop-types';
+
+function PhonebookForm({
+  addName, newName, handleNameChange, newNumber, handleNumberChange,
+}) {
+  return (
     <form onSubmit={addName}>
       <div>
         name:
@@ -18,6 +23,15 @@ const PhonebookForm = ({ addName, newName, handleNameChange, newNumber, handleNu
         <button type="submit">add</button>
       </div>
     </form>
-  )
+  );
+}
 
-export default PhonebookForm
+PhonebookForm.propTypes = {
+  addName: PropTypes.func.isRequired,
+  newName: PropTypes.string.isRequired,
+  handleNameChange: PropTypes.func.isRequired,
+  newNumber: PropTypes.string.isRequired,
+  handleNumberChange: PropTypes.func.isRequired,
+};
+
+export default PhonebookForm;

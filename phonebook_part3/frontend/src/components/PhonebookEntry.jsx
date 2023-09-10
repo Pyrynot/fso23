@@ -1,18 +1,31 @@
-const PhonebookEntry = ({ name, number, id, handleDelete }) => {
+import PropTypes from 'prop-types';
+
+function PhonebookEntry({
+  name, number, id, handleDelete,
+}) {
   const confirmDelete = () => {
     if (window.confirm(`Delete ${name}?`)) {
-      handleDelete(id)
+      handleDelete(id);
     }
-  }
+  };
 
-//maybe bad practice to share id here and to PhonebookList? 
+  // maybe bad practice to share id here and to PhonebookList?
 
   return (
     <li>
-      {name} {number}
-      <button onClick={confirmDelete}>Delete</button>
+      {name}
+      {' '}
+      {number}
+      <button type="button" onClick={confirmDelete}>Delete</button>
     </li>
-  )
+  );
 }
 
-export default PhonebookEntry
+PhonebookEntry.propTypes = {
+  name: PropTypes.string.isRequired,
+  number: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  handleDelete: PropTypes.func.isRequired,
+};
+
+export default PhonebookEntry;

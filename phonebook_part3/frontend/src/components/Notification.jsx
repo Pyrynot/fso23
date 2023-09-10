@@ -1,34 +1,42 @@
-const Notification = ({ message }) => {
-    const notificationStyle = {
-        color: 'green',
-        fontStyle: 'italic',
-        fontSize: 16
-    }
+import PropTypes from 'prop-types';
 
-    const errorStyle = {
-        color: 'red',
-        fontstyle: 'italic',
-        fontSize: 16
-    }
+function Notification({ message }) {
+  const notificationStyle = {
+    color: 'green',
+    fontStyle: 'italic',
+    fontSize: 16,
+  };
 
-    if (message === null) {
-      return null
-    }
-    
-    if (message.includes('ERROR')) {
-        <div style={errorStyle}>
-            {message}
-        </div>
-    }
+  const errorStyle = {
+    color: 'red',
+    fontStyle: 'italic',
+    fontSize: 16,
+  };
 
-        else { 
-        return (
-      <div style={notificationStyle}>
+  if (message === null) {
+    return null;
+  }
+
+  if (message.includes('ERROR')) {
+    return (
+      <div style={errorStyle}>
         {message}
       </div>
-    )
-  }}
+    );
+  }
+  return (
+    <div style={notificationStyle}>
+      {message}
+    </div>
+  );
+}
 
+Notification.propTypes = {
+  message: PropTypes.string,
+};
 
-  
-  export default Notification
+Notification.defaultProps = {
+  message: null,
+};
+
+export default Notification;
