@@ -1,10 +1,16 @@
+require('dotenv').config()
 const express = require("express")
 const morgan = require("morgan")
 const app = express()
+const cors = require('cors')
+const Person = require('./models/person')
+
 
 app.use(express.json())
 morgan.token("req-body", (req) => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :response-time ms - :res[content-length] - :req-body'))
+app.use(cors())
+app.use(express.static('dist'))
 
 let numbers = [
   {
@@ -30,9 +36,12 @@ let numbers = [
 ]
 
 
-app.get("/api/persons", (req, res) => {
-  res.json(numbers);
+app.get('/api/persons', (req, res) => {
+  Person.find({}).then(numbers => {
+    res.json(numbers)
+  })
 })
+
 
 
 app.get("/info", (req, res) => {
@@ -73,38 +82,25 @@ function generateId(min, max) {
 }
 
 
-app.post('/api/persons', (request, response) => {
-  const body = request.body
+app.post('/api/persons', (req, res) => {
+  const body = req.body
 
-  if (!body.name || !body.number) {
-    
-    return response.status(400).json({ 
-      error: 'name or number missing' 
-    })
+  if (body.name === undefined) {
+    return response.status(400).json({ error: 'content missing' })
   }
 
-  const existsAlready = numbers.find(({ name }) => name === body.name)
-  if (existsAlready) {
-
-    return response.status(400).json({
-      error: 'name already exists'
-    })
-  }
-
-  const number = {
+  const person = new Person({
     name: body.name,
-    number: body.number,
-    id: generateId(1, 2000)
-  }
+    number: body.number
+  })
 
-
-  numbers = numbers.concat(number)
-
-  response.json(number)
+  person.save().then(savedPerson => {
+    res.json(savedPerson)
+  })
 })
 
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+  console.log(`Server running on port ${PORT}`)
+})
