@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for pyryphonebook on 2023-09-10T13:25:11+03:00
+# fly.toml app configuration file generated for pyryphonebook on 2023-09-11T14:46:31+03:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -9,7 +9,7 @@ primary_region = "arn"
 [build]
 
 [env]
-  PORT = "3000" 
+  PORT = "3000"
 
 [http_service]
   internal_port = 3000
