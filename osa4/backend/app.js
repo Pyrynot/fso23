@@ -1,14 +1,17 @@
 const config = require('./utils/config')
 const express = require('express')
+const morgan = require('morgan');
 const app = express()
 const cors = require('cors')
-const blogsRouter = require('./controllers/blogs')
+const blogRouter = require('./controllers/blogs')
 const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
 const mongoose = require('mongoose')
 
+morgan.token('req-body', (req) => JSON.stringify(req.body));
 
-app.use('/api/blogs', blogsRouter)
+
+
 
 
 
@@ -24,10 +27,15 @@ mongoose.connect(config.MONGODB_URI)
     logger.error('error connecting to MongoDB:', error.message)
   })
 
+
+
 app.use(cors())
+app.use(morgan(':method :url :status :response-time ms - :res[content-length] - :req-body'));
 app.use(express.json())
 
+app.use('/api/blogs', blogRouter)
 
+app.use(middleware.errorHandler)
 
 
 module.exports = app;

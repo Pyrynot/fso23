@@ -1,7 +1,8 @@
-const blogsRouter = require('express').Router()
+const blogRouter = require('express').Router()
+const logger = require('../utils/logger')
 const Blog = require('../models/blog')
 
-blogsRouter.get('/', (request, response) => {
+blogRouter.get('/', (request, response) => {
     Blog
       .find({})
       .then(blogs => {
@@ -9,7 +10,7 @@ blogsRouter.get('/', (request, response) => {
       })
   })
   
-blogsRouter.post('/', (request, response) => {
+blogRouter.post('/', (request, response) => {
     const blog = new Blog(request.body)
   
     blog
@@ -19,4 +20,4 @@ blogsRouter.post('/', (request, response) => {
       })
   })
 
-module.exports = blogsRouter
+module.exports = blogRouter
