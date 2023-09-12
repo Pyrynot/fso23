@@ -1,5 +1,11 @@
 module.exports = {
   extends: ['airbnb', 'airbnb/hooks'],
+  env: {
+    commonjs: true,
+    es2021: true,
+    node: true,
+    jest: true,
+  },
   rules: {
     'no-console': 0,
     'no-underscore-dangle': 0,
