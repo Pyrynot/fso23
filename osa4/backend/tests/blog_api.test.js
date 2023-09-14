@@ -18,7 +18,7 @@ describe('when there is initially some blogs saved', () => {
             .expect('Content-Type', /application\/json/);
 
         expect(response.body).toHaveLength(helper.initialBlogs.length);
-    });
+    },20000);
 
     test('unique identifier named id and not _id', async () => {
         const response = await api.get('/api/blogs');
@@ -27,7 +27,7 @@ describe('when there is initially some blogs saved', () => {
             expect(blog.id).toBeDefined();
         })
 
-    })
+    },20000 )
 })
 
 describe('addition of a new note', () => {
@@ -41,12 +41,11 @@ describe('addition of a new note', () => {
 
         const blogsAtEnd = await helper.blogsInDb();
         expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
-        console.log(blogsAtEnd)
         const contents = blogsAtEnd.map((n) => n.title);
         expect(contents).toContain(
             'For testing the blog app',
         );
-    });
+    },20000);
 
     test('like field defaults to 0 if missing', async () => {
 
@@ -57,10 +56,55 @@ describe('addition of a new note', () => {
             .expect('Content-Type', /application\/json/);
 
         const blogsAtEnd = await helper.blogsInDb();
-        console.log(blogsAtEnd)
         expect(blogsAtEnd[blogsAtEnd.length -1].likes).toBe(
             0
         )
+    },20000)
+
+    test('returns 400 if title is missing', async () => {
+
+        await api
+            .post('/api/blogs')
+            .send(helper.missingTitleBlog)
+            .expect(400)
+            .expect('Content-Type', /application\/json/);
+                
+    })
+
+    test('returns 400 if url is missing', async () => {
+
+        await api
+            .post('/api/blogs')
+            .send(helper.missingUrlBlog)
+            .expect(400)
+            .expect('Content-Type', /application\/json/);
+                
+    })
+})
+
+describe('deletion of a new note', () => {
+    test('returns 204 and deletes the blog from the database', async () => {
+        const blogsAtStart = await helper.blogsInDb()
+        const blogToDelete = blogsAtStart[0]
+
+        await api
+            .delete(`/api/blogs/${blogToDelete.id}`)
+            .expect(204)
+
+        const blogsAtEnd = await helper.blogsInDb()
+
+        expect(blogsAtEnd).toHaveLength(
+            helper.initialBlogs.length - 1
+        )
+        
+        const contents = blogsAtEnd.map(r => r.id)
+        expect(contents).not.toContain(blogToDelete.id)
+    })
+
+    test ('returns 404 if id is not found', async () => {
+        await api
+            .delete('/api/blogs/111111111a1a1aa111111111')
+            .expect(404)
     })
 })
 

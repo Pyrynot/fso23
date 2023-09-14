@@ -34,6 +34,18 @@ const missingLikesBlog = {
     "url": "Test3",
 }
 
+const missingTitleBlog = {
+    "author": "Test2",
+    "url": "Test3",
+    "likes": 4
+}
+
+const missingUrlBlog = {
+    "title": "This blog is  missing the URL",
+    "author": "Test2",
+    "likes": 4
+}
+
 
 const blogsInDb = async () => {
     const blogs = await Blog.find({})
@@ -41,5 +53,5 @@ const blogsInDb = async () => {
 }
 
 module.exports = {
-    initialBlogs, blogsInDb, newNote, missingLikesBlog
+    initialBlogs, blogsInDb, newNote, missingLikesBlog, missingTitleBlog, missingUrlBlog
 };
