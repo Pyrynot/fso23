@@ -9,7 +9,7 @@ const Blog = require('../models/blog');
 beforeEach(async () => {
     await Blog.deleteMany({});
     await Blog.insertMany(helper.initialBlogs);
-});
+}, 20000);
 
 describe('when there is initially some blogs saved', () => {
     test('blogs are returned as json and with correct length', async () => {
@@ -30,7 +30,7 @@ describe('when there is initially some blogs saved', () => {
     },20000 )
 })
 
-describe('addition of a new note', () => {
+describe('addition of a new blog', () => {
     test('succeeds with valid data', async () => {
 
         await api
@@ -82,7 +82,7 @@ describe('addition of a new note', () => {
     })
 })
 
-describe('deletion of a new note', () => {
+describe('deletion of a new blog', () => {
     test('returns 204 and deletes the blog from the database', async () => {
         const blogsAtStart = await helper.blogsInDb()
         const blogToDelete = blogsAtStart[0]
@@ -105,9 +105,34 @@ describe('deletion of a new note', () => {
         await api
             .delete('/api/blogs/111111111a1a1aa111111111')
             .expect(404)
+
     })
 })
+
+describe('updating of a blog', () => {
+    test('returns 200 and updates likes in the database', async () => {
+        const blogsAtStart = await helper.blogsInDb()
+        const blogToUpdate = blogsAtStart[0]
+
+        await api
+            .put(`/api/blogs/${blogToUpdate.id}`)
+            .send({"likes": 15})
+            .expect(200)
+
+        const blogsAtEnd = await helper.blogsInDb()
+        expect(blogsAtEnd[0].likes).not.toEqual(blogToUpdate.likes)
+    })
+
+    test('returns 404 if id is not found', async () => {
+        await api
+            .put('/api/blogs/111111111a1a1aa111111111')
+            .send({"likes": 15})
+            .expect(404)
+    })
+})
+
 
 afterAll(async () => {
     await mongoose.connection.close();
 });
+
