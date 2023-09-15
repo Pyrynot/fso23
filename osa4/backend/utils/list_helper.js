@@ -50,15 +50,12 @@ const mostLikes = (blogs) => {
     }
 
     const authorLikes = _.groupBy(blogs, 'author')
-    console.log(authorLikes)
     const authorTotalLikes = _.map(authorLikes, (authorBlogs, author) => ({
         author,
         likes: _.sumBy(authorBlogs, 'likes')
     }))
-    console.log(authorTotalLikes)
 
     const mostLikesAuthor = _.maxBy(authorTotalLikes, 'likes')
-    console.log(mostLikesAuthor)
     return mostLikesAuthor
 }
 
