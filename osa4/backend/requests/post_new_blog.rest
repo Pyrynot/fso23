@@ -3,7 +3,9 @@ Content-Type: application/json
 
 {
     
-    "author": "Jepa",
-    "url": "Url3",
-    "likes": 15
+    "author": "sdfsdfsdfsdfsdfsd",
+    "title": "Tesdfdfgdfgdfgsdfsdfsdstio",
+    "url": "Url3sdsdfsfsdfsdff5555",
+    "likes": 2000,
+    "userId": "650457bed497a4a49fd1f459"
 }
