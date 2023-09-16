@@ -7,6 +7,8 @@ const initialBlogs = [
         "author": "Heinoja",
         "url": "Url3",
         "likes": 5
+        
+        
     },
     {
         "title": "Heh",
@@ -22,7 +24,7 @@ const initialBlogs = [
     }
 ]
 
-const newNote = {
+const newBlog = {
     "title": "For testing the blog app",
     "author": "Test2",
     "url": "Test3",
@@ -58,6 +60,8 @@ const usersInDb = async () => {
     return users.map(u => u.toJSON())
 }
 
+
+
 module.exports = {
-    initialBlogs, blogsInDb, newNote, missingLikesBlog, missingTitleBlog, missingUrlBlog, usersInDb
+    initialBlogs, blogsInDb, newBlog, missingLikesBlog, missingTitleBlog, missingUrlBlog, usersInDb
 };

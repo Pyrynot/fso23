@@ -1,11 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imp1dXAiLCJpZCI6IjY1MDViMTY3Y2MwMDFjNjdlNTA0N2Y3MCIsImlhdCI6MTY5NDg4MTA2M30.Ib0A7GzJiB9xVkvYhvydh1A_fqP2tKlcQnY4rWDMIvY
 
 {
-    
-    "author": "sdfsdfsdfsdfsdfsd",
-    "title": "Tesdfdfgdfgdfgsdfsdfsdstio",
-    "url": "Url3sdsdfsfsdfsdff5555",
-    "likes": 2000,
-    "userId": "650457bed497a4a49fd1f459"
+    "author": "123123",
+    "title": "Te1231232",
+    "url": "Url312312315",
+    "likes": 20
 }

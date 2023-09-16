@@ -36,6 +36,8 @@ app.use(cors())
 app.use(morgan(':method :url :status :response-time ms - :res[content-length] - :req-body'));
 app.use(express.json())
 
+app.use(middleware.tokenExtractor)
+app.use(middleware.userExtractor)
 app.use('/api/blogs', blogRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)

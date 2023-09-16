@@ -3,14 +3,42 @@ const supertest = require('supertest')
 const app = require('../app')
 const helper = require('./test_helper')
 const api = supertest(app)
+const jwt = require('jsonwebtoken')
+const secret = 'sekret'
+
+const newUser = {
+    username: 'pyrynot',
+    name: 'Pyry Heinoja',
+    password: 'salainen'
+}
+
+const getAuthToken = async () => {
+    const response = await api
+      .post('/api/login')
+      .send({
+        username: 'root', // Replace with a valid username
+        password: 'sekret', // Replace with a valid password
+      });
+    return response.body.token;
+  };
 
 
 const Blog = require('../models/blog');
 
 beforeEach(async () => {
+  //  await api
+ //   .post('/api/users')
+   // .send(newUser)
+    token = await getAuthToken()
+
     await Blog.deleteMany({});
-    await Blog.insertMany(helper.initialBlogs);
-}, 20000);
+    for (const blog of helper.initialBlogs) {
+        await api
+          .post('/api/blogs')
+          .send(blog)
+          .set('Authorization', `Bearer ${token}`);
+      }
+    }, 20000);
 
 describe('when there is initially some blogs saved', () => {
     test('blogs are returned as json and with correct length', async () => {
@@ -33,10 +61,10 @@ describe('when there is initially some blogs saved', () => {
 
 describe('addition of a new blog', () => {
     test('succeeds with valid data', async () => {
-
         await api
             .post('/api/blogs')
-            .send(helper.newNote)
+            .set('Authorization', `Bearer ${token}`)
+            .send(helper.newBlog)
             .expect(201)
             .expect('Content-Type', /application\/json/);
 
@@ -52,6 +80,7 @@ describe('addition of a new blog', () => {
 
         await api
             .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
             .send(helper.missingLikesBlog)
             .expect(201)
             .expect('Content-Type', /application\/json/);
@@ -66,6 +95,7 @@ describe('addition of a new blog', () => {
 
         await api
             .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
             .send(helper.missingTitleBlog)
             .expect(400)
             .expect('Content-Type', /application\/json/);
@@ -76,10 +106,20 @@ describe('addition of a new blog', () => {
 
         await api
             .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
             .send(helper.missingUrlBlog)
             .expect(400)
             .expect('Content-Type', /application\/json/);
                 
+    })
+
+    test('returns 401 if token is missing', async () => {
+
+        await api
+            .post('/api/blogs')
+            .send(helper.newBlog)
+            .expect(401)
+            .expect('Content-Type', /application\/json/);
     })
 })
 
@@ -89,7 +129,11 @@ describe('deletion of a new blog', () => {
         const blogToDelete = blogsAtStart[0]
 
         await api
+            .post('/api/blogs/')
+
+        await api
             .delete(`/api/blogs/${blogToDelete.id}`)
+            .set('Authorization', `Bearer ${token}`)
             .expect(204)
 
         const blogsAtEnd = await helper.blogsInDb()
@@ -105,6 +149,7 @@ describe('deletion of a new blog', () => {
     test ('returns 404 if id is not found', async () => {
         await api
             .delete('/api/blogs/111111111a1a1aa111111111')
+            .set('Authorization', `Bearer ${token}`)
             .expect(404)
 
     })
