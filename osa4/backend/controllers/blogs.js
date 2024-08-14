@@ -73,18 +73,17 @@ blogRouter.put('/:id', async (request, response) => {
 
   const blogToUpdate = await Blog.findById(request.params.id)
 
-  if ( blogToUpdate ) {
+  if (blogToUpdate) {
     const blog = {
       title: body.title || blogToUpdate.title,
       author: body.author || blogToUpdate.author,
       url: body.url || blogToUpdate.url,
-      likes: body.likes || blogToUpdate.likes,
-      comments: body.comments || blogToUpdate.comments,
-    };
-
+      likes: body.likes !== undefined ? body.likes : blogToUpdate.likes,
+      user: blogToUpdate.user
+    }
 
     
-    const updatedBlogDoc = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+    const updatedBlogDoc = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true }).populate('user', { username: 1, name: 1 })
     response.status(200).json(updatedBlogDoc)
   } else {
     response.status(404).json({error: 'Blog not found' })
