@@ -1,26 +1,22 @@
-// import { useQuery } from '@tanstack/react-query'
+import { useNotification } from '../NotificationContext'
 
-// const Notification = () => {
-//   const notificationQuery = useQuery({
-//     queryKey: ['notification'],
-//     queryFn: () => '', // Initially empty
-//     staleTime: Infinity // Prevent automatic refetching
-//   })
+const Notification = () => {
+  const [notification] = useNotification()
 
-//   const style = {
-//     border: 'solid',
-//     padding: 10,
-//     borderWidth: 1,
-//     marginBottom: 5
-//   }
+  const style = {
+    border: 'solid',
+    padding: 10,
+    borderWidth: 1,
+    marginBottom: 5
+  }
 
-//   if (!notificationQuery.data) return null
+  if (!notification) return null
 
-//   return (
-//     <div style={style}>
-//       {notificationQuery.data}
-//     </div>
-//   )
-// }
+  return (
+    <div style={style}>
+      {notification}
+    </div>
+  )
+}
 
-// export default Notification
+export default Notification
